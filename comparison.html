@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-Hant" data-video-release="jun-20261020"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Life Edit Studio｜前後比較</title>
+<style>
+:root{--navy:#0b1f3a;--paper:#f5f2ea;--gold:#c9a24b;--split:50%}*{box-sizing:border-box}body{margin:0;background:var(--navy);color:var(--paper);font:16px/1.6 system-ui,sans-serif}main{max-width:960px;margin:auto;padding:28px 20px}header{border-top:3px solid var(--gold);padding:20px 0}small{color:#c4cbd4}h1{font-size:30px;margin:6px 0}p{margin:8px 0}.layout{display:grid;grid-template-columns:minmax(250px,420px) 1fr;gap:28px}.stage{position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;background:#030a15;border-radius:14px;touch-action:pan-y;isolation:isolate}.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none}.stage #before{z-index:2;clip-path:inset(0 calc(100% - var(--split)) 0 0)}.badge{position:absolute;top:15px;z-index:3;padding:4px 10px;background:#0b1f3acb;border:1px solid #f5f2ea66;border-radius:20px;font-size:12px;pointer-events:none}.raw{left:10px}.done{right:10px}.divider{position:absolute;left:var(--split);top:0;bottom:0;width:3px;transform:translateX(-50%);background:var(--paper);z-index:4;pointer-events:none}.handle{position:absolute;left:var(--split);top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;border:2px solid var(--paper);background:var(--navy);color:var(--paper);font-size:23px;z-index:5;cursor:ew-resize;touch-action:none}.handle:focus-visible{outline:4px solid var(--gold);outline-offset:4px}.panel{align-self:center}button,.pick{background:var(--paper);color:var(--navy);border:0;border-radius:8px;font:inherit;padding:10px 16px;cursor:pointer;display:inline-block}button:disabled{opacity:.4;cursor:default}.row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pick{background:#203958;color:var(--paper);font-size:14px}.pick input{display:block;max-width:240px;font-size:12px;margin-top:6px}input[type=range]{width:100%;accent-color:var(--gold)}label{display:block;margin-top:18px;font-size:14px}#status{min-height:54px;color:#e6d29e;font-size:14px}.note{font-size:13px;color:#bfc8d3}#clock{font-variant-numeric:tabular-nums}details{margin-top:18px}summary{cursor:pointer} @media(max-width:680px){main{padding:16px}.layout{grid-template-columns:1fr}.stage{max-width:380px;margin:auto}.panel{max-width:430px;margin:auto;width:100%}h1{font-size:24px}}
+.film-tabs button[aria-pressed="true"]{background:var(--gold)}.film-tabs button[aria-pressed="false"]{background:#203958;color:var(--paper)}.stage{width:min(100%,43.875vh);max-height:none;aspect-ratio:9/16;margin-inline:auto}.note{line-height:1.6}header,details,.pick{display:none!important}main{padding:8px!important}.layout{display:block!important}.stage{max-width:300px!important;margin:auto}.panel{max-width:340px;margin:auto}#filmTitle{font-size:15px!important;margin:6px 0!important}.film-tabs{margin:4px 0!important}.film-tabs button{font-size:12px;padding:8px}.panel .note{font-size:11px}#status{min-height:0;font-size:12px}label{margin-top:5px}.row{margin:6px 0}#subtitle{display:none} .video-play,.video-sound{position:absolute;z-index:8;border:1px solid #f5f2eaaa;background:#0b1f3add;color:#f5f2ea;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 18px #0004;backdrop-filter:blur(5px);touch-action:manipulation}.video-play{left:50%;top:23%;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;flex-direction:column;gap:0;padding:10px;font-size:11px}.video-play svg{width:35px;height:35px}.video-sound{right:13px;bottom:16px;width:46px;height:46px;border-radius:50%;padding:11px}.video-sound svg{width:24px;height:24px}.video-play:focus-visible,.video-sound:focus-visible{outline:3px solid var(--gold);outline-offset:3px}.stage.is-playing .video-play{width:46px;height:46px;top:21%;opacity:.75}.stage.is-playing .video-play svg{width:24px;height:24px}.stage.is-playing .video-play span{display:none}.video-play:disabled{opacity:.7;cursor:wait}.video-sound[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)} #stage #after{opacity:0;pointer-events:none}#comparisonCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;object-fit:contain}  .film-tabs[hidden]{display:none!important} </style></head><body><main><header><small>LIFE EDIT STUDIO / REVIEW</small><h1>看見剪輯前後的差別</h1><p id="subtitle">拖動中間的圓鈕，同一時間比較兩邊畫面。</p></header>
+<div class="row film-tabs" hidden><button id="film1" aria-pressed="true">AI 剪輯示範</button><button id="film2" hidden aria-pressed="false">第二支影片</button></div><h2 id="filmTitle" style="font-size:20px;margin:10px 0 18px"></h2><div class="row"><button id="retry" type="button">重新載入影片</button><a id="direct" target="_blank" rel="noopener" style="color:#c9a24b;padding:10px">直接開啟成片 ↗</a></div><div class="layout"><div class="stage" id="stage"><video id="after" playsinline webkit-playsinline preload="metadata" muted></video><canvas id="comparisonCanvas" width="720" height="1280" aria-label="同一時間的乾淨初剪與動畫成片對比"></canvas><span class="badge raw">乾淨初剪</span><span class="badge done">字幕＋動畫</span><button id="play" class="video-play" type="button" aria-label="播放比較影片" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><span>播放</span></button><button id="sound" class="video-sound" type="button" aria-label="開啟成片聲音" aria-pressed="false" title="開啟成片聲音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="m17 9 5 6m0-6-5 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button><div class="divider"></div><button id="handle" class="handle" role="slider" aria-label="原片與編輯後的分界" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span aria-hidden="true" style="display:block;position:absolute;top:62px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:12px;background:#0b1f3ae6;padding:3px 10px;border-radius:12px">初剪 ◀｜▶ 字幕＋動畫</span>↔</button></div>
+<div class="panel"><p id="status" role="status" aria-live="polite">選擇兩支相同時間軸的影片，或使用頁面內的示範。</p><div class="row"><button id="reset">分界置中</button></div><label for="split">分界位置</label><input id="split" aria-label="分界位置" type="range" min="0" max="100" value="50"><label for="seek">影片時間 <span id="clock">0.00 / 0.00 秒</span></label><input id="seek" aria-label="影片時間" type="range" min="0" max="1" step="0.01" value="0" disabled>
+<p class="note">左右畫面共用同一個播放時間。按播放後可自由拖曳，右下角喇叭可開啟聲音。</p><p class="note"></p></div></div></main>
+<script>
+const $=id=>document.getElementById(id),after=$('after'),stage=$('stage'),canvas=$('comparisonCanvas'),ctx=canvas.getContext('2d');
+const FILMS=[{"name":"生活製片廠｜AI 剪輯示範","source":"comparison_current_sync.mp4","afterPoster":"comparison_current_poster.jpg"}];
+const state={playing:false,drag:false,ready:false,index:0,split:50,poster:null};
+function playbackUI(){stage.classList.toggle('is-playing',state.playing);$('play').innerHTML=(state.playing?"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M7 5h4v14H7zm6 0h4v14h-4z\" fill=\"currentColor\"/></svg>":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M8 5v14l11-7z\" fill=\"currentColor\"/></svg>")+'<span>'+(state.playing?'暫停':'播放')+'</span>';$('play').setAttribute('aria-label',state.playing?'暫停比較影片':'播放比較影片');}
+function soundUI(){const on=!after.muted;$('sound').innerHTML=on?"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M3 9v6h4l5 4V5L7 9z\" fill=\"currentColor\"/><path d=\"M16 8q4 4 0 8m3-11q7 7 0 14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/></svg>":"<svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 9v6h4l5 4V5L8 9z\" fill=\"currentColor\"/><path d=\"m17 9 5 6m0-6-5 6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/></svg>";$('sound').setAttribute('aria-pressed',String(on));$('sound').setAttribute('aria-label',on?'關閉成片聲音':'開啟成片聲音');$('sound').title=on?'關閉成片聲音':'開啟成片聲音';}
+
+function say(s){$('status').textContent=s;}
+function draw(){
+ const W=canvas.width,H=canvas.height,x=Math.round(W*state.split/100);
+ if(after.readyState>=2&&after.videoWidth>0){
+  const half=after.videoWidth/2,sh=after.videoHeight;
+  if(x>0)ctx.drawImage(after,0,0,half*x/W,sh,0,0,x,H);
+  if(x<W)ctx.drawImage(after,half+half*x/W,0,half*(W-x)/W,sh,x,0,W-x,H);
+ }else if(state.poster&&state.poster.complete){ctx.drawImage(state.poster,0,0,W,H);}
+}
+function clock(){const d=Number.isFinite(after.duration)?after.duration:49.87;$('clock').textContent=after.currentTime.toFixed(2)+' / '+d.toFixed(2)+' 秒';if(!$('seek').matches(':active'))$('seek').value=after.currentTime;}
+function tick(){draw();if(state.playing)clock();requestAnimationFrame(tick);}requestAnimationFrame(tick);
+function split(v){state.split=Math.max(0,Math.min(100,Number(v)));stage.style.setProperty('--split',state.split+'%');$('split').value=state.split;$('handle').setAttribute('aria-valuenow',String(Math.round(state.split)));draw();}
+function pause(){after.pause();state.playing=false;playbackUI();}
+async function play(){
+ if(!state.ready)return;
+ if(state.playing){pause();return;}
+ if(after.ended||after.currentTime>=after.duration-.06)after.currentTime=0;
+ try{await after.play();state.playing=true;playbackUI();say('左右拖曳中間圓鈕比較。');}catch(e){pause();say('請再按一次播放。');}
+}
+function chooseFilm(index){
+ pause();state.index=index;state.ready=false;$('play').disabled=true;$('seek').disabled=true;
+ const f=FILMS[index];$('filmTitle').textContent=f.name;
+ $('film1').setAttribute('aria-pressed',String(index===0));$('film2').setAttribute('aria-pressed',String(index===1));
+ after.muted=true;after.defaultMuted=true;soundUI();
+ state.poster=new Image();state.poster.onload=draw;state.poster.src=f.afterPoster;
+ const url=new URL(f.source,location.href);url.searchParams.set('v','jun-20261020');after.src=url.href;after.load();
+ $('direct').href=url.href;$('direct').textContent='檢查影片檔 ↗';
+ split(50);say('正在載入同步比較影片…');
+}
+after.addEventListener('loadedmetadata',()=>{state.ready=true;$('play').disabled=false;$('seek').disabled=false;$('seek').max=after.duration;clock();});
+after.addEventListener('loadeddata',()=>{state.ready=true;$('play').disabled=false;$('seek').disabled=false;draw();say('按畫面上的播放鍵開始比較，預設靜音。');});
+after.addEventListener('canplay',()=>{state.ready=true;$('play').disabled=false;$('seek').disabled=false;draw();});
+after.addEventListener('playing',()=>{state.playing=true;playbackUI();});
+after.addEventListener('ended',()=>{pause();clock();draw();});
+after.addEventListener('seeked',()=>{draw();clock();say(state.playing?'左右拖曳中間圓鈕比較。':'按畫面上的播放鍵開始比較，右下角可切換聲音。');});
+after.addEventListener('waiting',()=>say('正在緩衝，左右畫面會一起等待。'));
+after.addEventListener('error',()=>{pause();state.ready=false;$('play').disabled=true;say('影片載入失敗，請確認 comparison_current_sync.mp4 已上傳到同一層。');});
+$('play').onclick=play;
+$('sound').onclick=()=>{after.muted=!after.muted;after.volume=1;soundUI();};
+$('reset').onclick=()=>split(50);$('split').oninput=e=>split(e.target.value);
+$('seek').oninput=e=>{if(state.ready){after.currentTime=Number(e.target.value);clock();}};
+function fromPointer(e){const r=stage.getBoundingClientRect();split((e.clientX-r.left)/r.width*100);}
+$('handle').onpointerdown=e=>{state.drag=true;e.currentTarget.setPointerCapture(e.pointerId);fromPointer(e);};
+$('handle').onpointermove=e=>{if(state.drag)fromPointer(e);};
+for(const n of ['pointerup','pointercancel','lostpointercapture'])$('handle').addEventListener(n,()=>state.drag=false);
+$('handle').onkeydown=e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();split(e.key==='Home'?0:e.key==='End'?100:state.split+(e.key==='ArrowLeft'?-1:1)*(e.shiftKey?10:2));}};
+$('retry').onclick=()=>chooseFilm(state.index);$('film1').onclick=()=>chooseFilm(0);$('film2').onclick=()=>chooseFilm(1);
+window.addEventListener('pagehide',pause);chooseFilm(0);
+</script></body></html>
+
